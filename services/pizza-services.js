@@ -4,12 +4,7 @@ import sql from 'mssql';
 
 class PizzaService {
 
-    constructor() {
-        //this.pool = this.sqlConnectionWaiter();
-        //console.log(this.pool);
-    }
-
-    getAllPizzas = async () => {
+    static getAllPizzas = async () => {
         let returnEntity = null;
         try {
             let connection = await sql.connect(config); //Esto es un asco. no se hace asi, pero javascript se queja si se hace de cualquier otra manera
@@ -17,11 +12,12 @@ class PizzaService {
             returnEntity = result.recordsets[0];
         } catch(error) {
             console.log(error);
+            return error;
         }
         return returnEntity;
     }
 
-    getPizzaById = async (id) => {
+    static getPizzaById = async (id) => {
         let returnEntity = null; 
         try {
             let connection = await sql.connect(config); //Esto es un asco. no se hace asi, pero javascript se queja si se hace de cualquier otra manera
@@ -31,11 +27,12 @@ class PizzaService {
             returnEntity = result.recordsets[0][0];
         } catch (error) {
             console.log(error);
+            return error;
         }
         return returnEntity;
     }
 
-    createPizza = async (Pizza) => {
+    static createPizza = async (Pizza) => {
         let returnEntity = null;
         try {
             let connection = await sql.connect(config); //Esto es un asco. no se hace asi, pero javascript se queja si se hace de cualquier otra manera
@@ -49,11 +46,12 @@ class PizzaService {
             returnEntity = result; //Rows affected
         } catch (error) {
             console.log(error);
+            return error;
         }
         return returnEntity;
     }
 
-    updatePizza = async (Pizza) => {
+    static updatePizza = async (Pizza) => {
         let returnEntity = null;
         try {
             let connection = await sql.connect(config); //Esto es un asco. no se hace asi, pero javascript se queja si se hace de cualquier otra manera
@@ -67,20 +65,22 @@ class PizzaService {
             returnEntity = result; //Rows affected
         } catch (error) {
             console.log(error);
+            return error;
         }
         return returnEntity;
     }
 
-    deletePizza = async (id) => {
+    static deletePizza = async (id) => {
         let returnEntity = null;
         try {
             let connection = await sql.connect(config); //Esto es un asco. no se hace asi, pero javascript se queja si se hace de cualquier otra manera
             let result = await connection.request()
-                                .input('pId', sql.Int, Pizza.id)
+                                .input('pId', sql.Int, id)
                                 .query("DELETE FROM Pizza WHERE id = @pId");
             returnEntity = result; //Rows affected
         } catch (error) {
             console.log(error);
+            return error;
         }
         return returnEntity;
     }
